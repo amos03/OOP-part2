@@ -25,8 +25,16 @@ class Book
     end
 
     def self.overdue_books
+        @@on_loan.each do |loaned_book|
+            if loaned_book.due_date < Time.now
+                puts "The following books are overdue:"
+                puts "#{loaned_book.title} was due on: #{loaned_book.due_date}"
+            else
+                puts "There are no overdue books."
+            end
+        end
     end
-
+    
     def self.browse
         return @@on_shelf.sample
     end
@@ -120,28 +128,30 @@ puts "-----------------------"
 puts "What books are currently on loan"
 p Book.borrowed
 puts ""
-puts "================================="
-puts ""
-puts "Returning War and Peace to the library:"
-p war_and_peace.return_to_library
-puts "-----------------------"
-puts "What books are still available on the shelf now?"
-p Book.available
-puts "-----------------------"
-puts "What books are currently on loan"
-p Book.borrowed
-puts ""
-puts "================================="
-puts ""
-puts "Attempting to return War and Peace to the library, even though it has already been returned:"
-p war_and_peace.return_to_library
-puts "-----------------------"
-puts "Returning Portrait of the Artist to the library:"
-p portrait.return_to_library
-puts "-----------------------"
-puts "-----------------------"
-puts "What books are still available on the shelf now?"
-p Book.available
-puts "-----------------------"
-puts "What books are currently on loan"
-p Book.borrowed
+# puts "================================="
+# puts ""
+# puts "Returning War and Peace to the library:"
+# p war_and_peace.return_to_library
+# puts "-----------------------"
+# puts "What books are still available on the shelf now?"
+# p Book.available
+# puts "-----------------------"
+# puts "What books are currently on loan"
+# p Book.borrowed
+# puts ""
+# puts "================================="
+# puts ""
+# puts "Attempting to return War and Peace to the library, even though it has already been returned:"
+# p war_and_peace.return_to_library
+# puts "-----------------------"
+# puts "Returning Portrait of the Artist to the library:"
+# p portrait.return_to_library
+# puts "-----------------------"
+# puts "-----------------------"
+# puts "What books are still available on the shelf now?"
+# p Book.available
+# puts "-----------------------"
+# puts "What books are currently on loan"
+# p Book.borrowed
+# puts "================================="
+Book.overdue_books
