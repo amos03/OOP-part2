@@ -4,10 +4,10 @@ class Book
     
 
     def initialize (book_author, book_title, book_isbn)
-        @due_date=nil
-        @title=book_title
         @author=book_author
+        @title=book_title
         @isbn=book_isbn
+        @due_date=nil      
     end
 
     attr_accessor :due_date
@@ -37,9 +37,16 @@ class Book
     end
 
     def self.available
+        return @@on_shelf
     end
 
     def self.borrowed
     end
 
 end
+
+p portrait = Book.create("James Joyce", "Portrait of the Artist as a Young Man", "0142437344")
+p karamazov = Book.create("Fyodor Dostoyevsky", "The Brothers Karamazov", "0141915684")
+p war_and_peace = Book.create("Leo Tolstoy", "War and Peace", "0375760644")
+
+p Book.available
