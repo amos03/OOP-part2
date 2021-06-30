@@ -33,7 +33,9 @@ class BankAccount
     
     def self.interest_time
         @@accounts.each do |account|
+            @@total_balance += account.balance * @@interest_rate * 0.01
             account.balance += account.balance * @@interest_rate * 0.01
+        # note the order above: first do the total balance THEN the account balances; otherwise there will be another percentage compounded onto total balance, since account balance will already have been increased
         end
     end
 end
@@ -50,3 +52,7 @@ p BankAccount.total_funds
 BankAccount.interest_time
 p my_account.balance
 p your_account.balance
+puts BankAccount.total_funds
+my_account.withdraw(50)
+puts my_account.balance
+puts BankAccount.total_funds
