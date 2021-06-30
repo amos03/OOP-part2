@@ -11,6 +11,7 @@ class Book
     end
 
     attr_accessor :due_date
+    attr_reader :title
 
     
     #Class Methods
@@ -24,14 +25,17 @@ class Book
         return Time.now + (14*24*60*60)
     end
 
+
     def self.overdue_books
-        @@on_loan.each do |loaned_book|
+        overdue_books=0
+            @@on_loan.each do |loaned_book|
             if loaned_book.due_date < Time.now
-                puts "The following books are overdue:"
-                puts "#{loaned_book.title} was due on: #{loaned_book.due_date}"
-            else
-                puts "There are no overdue books."
+                puts "Overdue book: #{loaned_book.title} was due on #{loaned_book.due_date}."
+                overdue_books += 1
             end
+        end
+        if overdue_books ==0
+            puts "There are no overdue books."
         end
     end
     
@@ -64,8 +68,8 @@ end
 def return_to_library
     if lent_out?
         @due_date=nil
-        @@on_loan.delete(self)
         @@on_shelf << self
+        @@on_loan.delete(self)
         return true
     else
         return false
@@ -127,31 +131,25 @@ p Book.available
 puts "-----------------------"
 puts "What books are currently on loan"
 p Book.borrowed
-puts ""
-# puts "================================="
-# puts ""
-# puts "Returning War and Peace to the library:"
-# p war_and_peace.return_to_library
-# puts "-----------------------"
-# puts "What books are still available on the shelf now?"
-# p Book.available
-# puts "-----------------------"
-# puts "What books are currently on loan"
-# p Book.borrowed
-# puts ""
-# puts "================================="
-# puts ""
-# puts "Attempting to return War and Peace to the library, even though it has already been returned:"
-# p war_and_peace.return_to_library
-# puts "-----------------------"
-# puts "Returning Portrait of the Artist to the library:"
-# p portrait.return_to_library
-# puts "-----------------------"
-# puts "-----------------------"
-# puts "What books are still available on the shelf now?"
-# p Book.available
-# puts "-----------------------"
-# puts "What books are currently on loan"
-# p Book.borrowed
-# puts "================================="
+puts "================================="
+puts "Checking for overdue books:"
+Book.overdue_books
+puts "================================="
+puts "Manually adjusting due date for Portrait of the Artist"
+portrait.due_date=Time.now - (15*24*60*60)
+p portrait.due_date
+puts "================================="
+puts "Checking for overdue books:"
+Book.overdue_books
+puts "================================="
+puts "Returning Portrait of the Artist to the library:"
+p portrait.return_to_library
+puts "================================="
+puts "What books are still available on the shelf now?"
+p Book.available
+puts "-----------------------"
+puts "What books are currently on loan"
+p Book.borrowed
+puts "================================="
+puts "Checking for overdue books:"
 Book.overdue_books
