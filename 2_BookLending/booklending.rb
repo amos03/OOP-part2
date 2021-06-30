@@ -46,6 +46,7 @@ def borrow
         return false
     else 
         @due_date=Book.current_due_date
+        #question - I somewhat stumbled upon using "self" below based what we learned about self in the context of initialize meaning the instance that was just created
         @@on_loan << self
         @@on_shelf.delete(self)
         return true
@@ -53,10 +54,18 @@ def borrow
 end
 
 def return_to_library
+    if lent_out?
+        @due_date=nil
+        @@on_loan.delete(self)
+        @@on_shelf << self
+        return true
+    else
+        return false
+    end
 end
 
 def lent_out?
-    if @@on_loan.include?(Book)
+    if @@on_loan.include?(self)
         return true
     else
         return false
@@ -90,6 +99,46 @@ puts "If borrowing successful, display true:"
 p portrait.borrow
 puts "Display Portrait of the Artist's due date (2 weeks from today):"
 p portrait.due_date
+puts "-----------------------"
+puts "What books are still available on the shelf now?"
+p Book.available
+puts "-----------------------"
+puts "What books are currently on loan"
+p Book.borrowed
+puts ""
+puts "================================="
+puts ""
+puts "Attempting to borrow War and Peace"
+puts "If borrowing successful, display true:"
+p war_and_peace.borrow
+puts "Display War and Peace's due date (2 weeks from today):"
+p war_and_peace.due_date
+puts "-----------------------"
+puts "What books are still available on the shelf now?"
+p Book.available
+puts "-----------------------"
+puts "What books are currently on loan"
+p Book.borrowed
+puts ""
+puts "================================="
+puts ""
+puts "Returning War and Peace to the library:"
+p war_and_peace.return_to_library
+puts "-----------------------"
+puts "What books are still available on the shelf now?"
+p Book.available
+puts "-----------------------"
+puts "What books are currently on loan"
+p Book.borrowed
+puts ""
+puts "================================="
+puts ""
+puts "Attempting to return War and Peace to the library, even though it has already been returned:"
+p war_and_peace.return_to_library
+puts "-----------------------"
+puts "Returning Portrait of the Artist to the library:"
+p portrait.return_to_library
+puts "-----------------------"
 puts "-----------------------"
 puts "What books are still available on the shelf now?"
 p Book.available
