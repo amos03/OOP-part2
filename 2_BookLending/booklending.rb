@@ -1,34 +1,21 @@
 class Book
     @@on_shelf=[]
     @@on_loan=[]
-    
 
     def initialize (book_author, book_title, book_isbn)
         @author=book_author
         @title=book_title
         @isbn=book_isbn
+        @@on_shelf << self
         @due_date=nil      
     end
 
     attr_accessor :due_date
 
-    def borrow
-    end
-
-    def return_to_library
-    end
-
-    def lent_out?
-        if @@on_loan.include?(Book)
-            return true
-        else
-            return false
-        end
-    end
-
+    
+    #Class Methods
     def self.create (book_author, book_title, book_isbn)
         new_book = Book.new(book_author, book_title, book_isbn)
-        @@on_shelf << new_book
         return new_book
     end
 
@@ -45,12 +32,37 @@ class Book
     end
 
     def self.available
-        return @@on_shelf
+        @@on_shelf
     end
 
     def self.borrowed
         return @@on_loan
     end
+
+#Instance Methods
+
+def borrow
+    if lent_out?
+        return false
+    else 
+        @due_date=Book.current_due_date
+        @@on_loan << self
+        @@on_shelf.delete(self)
+        return true
+    end
+end
+
+def return_to_library
+end
+
+def lent_out?
+    if @@on_loan.include?(Book)
+        return true
+    else
+        return false
+    end
+end
+
 
 end
 
@@ -72,3 +84,15 @@ p Book.browse
 puts "-----------------------"
 puts "Has Portrait of the Artist been checked out?"
 p portrait.lent_out?
+puts "-----------------------"
+puts "Attempting to borrow Portrait of the Artist"
+puts "If borrowing successful, display true:"
+p portrait.borrow
+puts "Display Portrait of the Artist's due date (2 weeks from today):"
+p portrait.due_date
+puts "-----------------------"
+puts "What books are still available on the shelf now?"
+p Book.available
+puts "-----------------------"
+puts "What books are currently on loan"
+p Book.borrowed
